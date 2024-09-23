@@ -1,0 +1,188 @@
+import React, { useState } from 'react';
+import { SafeAreaView, TextInput, Button, FlatList, Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+
+const App = () => {
+  const [nome, setNome] = useState('');
+  const [endereco, setEndereco] = useState('');
+  const [contato, setContato] = useState('');
+  const [categorias, setCategorias] = useState('');
+  const [imagemURL, setImagemURL] = useState('');
+  const [clientes, setClientes] = useState([]);
+  const [pesquisa, setPesquisa] = useState('');
+
+  const adicionarCliente = () => {
+    if (nome && endereco && contato && categorias && imagemURL) {
+      setClientes([...clientes, {
+        id: Math.random().toString(),
+        nome,
+        endereco,
+        contato,
+        categorias,
+        imagem: imagemURL,
+      }]);
+      setNome('');
+      setEndereco('');
+      setContato('');
+      setCategorias('');
+      setImagemURL('');
+    }
+  };
+
+  const filtrarClientes = () => {
+    if (pesquisa) {
+      return clientes.filter(cliente =>
+        cliente.categorias.toLowerCase().includes(pesquisa.toLowerCase())
+      );
+    }
+    return clientes;
+  };
+
+  const renderItem = ({ item }) => (
+    <View style={styles.item}>
+      <Image source={{ uri: item.imagem }} style={styles.imagem} />
+      <Text style={styles.itemText}>Nome: {item.nome}</Text>
+      <Text style={styles.itemText}>Endereço: {item.endereco}</Text>
+      <Text style={styles.itemText}>Contato: {item.contato}</Text>
+      <Text style={styles.itemText}>Categorias: {item.categorias}</Text>
+    </View>
+  );
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.titulo}>Meeting</Text>
+      <Text style={styles.subtitulo}>Conectando pessoas e ideias</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Nome do Cliente"
+        value={nome}
+        onChangeText={setNome}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Endereço do Cliente"
+        value={endereco}
+        onChangeText={setEndereco}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Contato do Cliente"
+        value={contato}
+        onChangeText={setContato}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Categorias de Produtos"
+        value={categorias}
+        onChangeText={setCategorias}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="URL da Imagem"
+        value={imagemURL}
+        onChangeText={setImagemURL}
+      />
+      
+      <TouchableOpacity style={styles.button} onPress={adicionarCliente}>
+        <Text style={styles.buttonText}>Adicionar Cliente</Text>
+      </TouchableOpacity>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Pesquisar por Categoria"
+        value={pesquisa}
+        onChangeText={setPesquisa}
+      />
+
+      <FlatList
+        data={filtrarClientes()}
+        renderItem={renderItem}
+        keyExtractor={item => item.id}
+      />
+
+      <Text style={styles.contato}>E-mail para contato: MeetingOFC@hotmail.com.br</Text>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#f4f4f9',
+  },
+  titulo: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 5,
+    color: '#ffffff',
+    backgroundColor: '#007BFF',
+    paddingVertical: 15,
+    borderRadius: 10,
+    elevation: 4,
+  },
+  subtitulo: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginBottom: 20,
+    color: '#555',
+  },
+  input: {
+    height: 50,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    marginBottom: 15,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    backgroundColor: '#ffffff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  item: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    alignItems: 'flex-start',
+    marginVertical: 5,
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    elevation: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+  itemText: {
+    marginVertical: 3,
+    color: '#333',
+  },
+  imagem: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginBottom: 5,
+  },
+  button: {
+    backgroundColor: '#28a745',
+    paddingVertical: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  buttonText: {
+    color: '#ffffff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  contato: {
+    textAlign: 'center',
+    marginTop: 20,
+    fontSize: 16,
+    color: '#555',
+  },
+});
+
+export default App;
