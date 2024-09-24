@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { SafeAreaView, TextInput, Button, FlatList, Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import {
+  FlatList,
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 const App = () => {
   const [nome, setNome] = useState('');
@@ -12,14 +21,17 @@ const App = () => {
 
   const adicionarCliente = () => {
     if (nome && endereco && contato && categorias && imagemURL) {
-      setClientes([...clientes, {
-        id: Math.random().toString(),
-        nome,
-        endereco,
-        contato,
-        categorias,
-        imagem: imagemURL,
-      }]);
+      setClientes([
+        ...clientes,
+        {
+          id: Math.random().toString(),
+          nome,
+          endereco,
+          contato,
+          categorias,
+          imagem: imagemURL,
+        },
+      ]);
       setNome('');
       setEndereco('');
       setContato('');
@@ -30,8 +42,10 @@ const App = () => {
 
   const filtrarClientes = () => {
     if (pesquisa) {
-      return clientes.filter(cliente =>
-        cliente.categorias.toLowerCase().includes(pesquisa.toLowerCase())
+      return clientes.filter(
+        (cliente) =>
+          cliente.categorias.toLowerCase().includes(pesquisa.toLowerCase()) ||
+          cliente.nome.toLowerCase().includes(pesquisa.toLowerCase())
       );
     }
     return clientes;
@@ -82,7 +96,7 @@ const App = () => {
         value={imagemURL}
         onChangeText={setImagemURL}
       />
-      
+
       <TouchableOpacity style={styles.button} onPress={adicionarCliente}>
         <Text style={styles.buttonText}>Adicionar Cliente</Text>
       </TouchableOpacity>
@@ -97,10 +111,12 @@ const App = () => {
       <FlatList
         data={filtrarClientes()}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
       />
 
-      <Text style={styles.contato}>E-mail para contato: MeetingOFC@hotmail.com.br</Text>
+      <Text style={styles.contato}>
+        E-mail para contato: MeetingOFC@hotmail.com.br
+      </Text>
     </SafeAreaView>
   );
 };
@@ -186,3 +202,4 @@ const styles = StyleSheet.create({
 });
 
 export default App;
+
